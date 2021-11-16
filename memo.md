@@ -95,9 +95,30 @@ gitへのプッシュなどはローカルのファイルを送ればいいか�
 
 ### docker-compose exec web /bin/bash
 コンテナのシェルを起動。`docker-compose exec web ~~~`と入力しなくてもコマンドが実行できる
+exit で退出
 
 ### `docker-compose build` , `docker-compose up -d`
 Dockerfile Gemfileの変更を反映させたい場合に使う
 downさせてからのが良さげ？
 
 
+## 開発メモ(実行)
+### github登録
+[ssh鍵を生成](https://git-scm.com/book/ja/v2/Git%E3%82%B5%E3%83%BC%E3%83%90%E3%83%BC-SSH-%E5%85%AC%E9%96%8B%E9%8D%B5%E3%81%AE%E4%BD%9C%E6%88%90)し、githubに登録。プッシュできるようになる
+
+### [Bootstrapのインストール](https://qiita.com/oak1331/items/3b4ebf9b076246c103f4)
+- パッケージインストール
+```
+$ yarn add bootstrap@next
+$ yarn add @popperjs/core
+```
+- 各ファイルでの設定
+application  .js  .scss  .html.erb  の３つ
+
+- 詳細はリンクから
+
+### 
+
+## 開発メモ(構想)
+### ユーザ機能作成
+### 
