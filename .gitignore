@@ -36,4 +36,4 @@ yarn-debug.log*
 .yarn-integrity
 
 # 追加記述
-
+/memo.md
