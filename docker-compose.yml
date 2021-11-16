@@ -2,6 +2,7 @@ version: '3'
 services:
   db:
     image: postgres
+    user: postgres
     volumes:
       - ./tmp/db:/var/lib/postgresql/data
     environment:

@@ -117,8 +117,18 @@ application  .js  .scss  .html.erb  の３つ
 
 - 詳細はリンクから
 
-### 
+### rails generate controller StaticPages home
+とりあえずビューが欲しいのでhomeアクションを追加
+routes.rbに`root 'static_pages#home'`と記述。
 
 ## 開発メモ(構想)
 ### ユーザ機能作成
 ### 
+
+## 開発日記
+- 11/16     
+環境構築をした。これでローカルでの開発ができる      
+ひとまずはapp/views/layouts/application.html.erbの編集。bootstrapは使えるようになってるはずなので、ヘッダーを作成する   
+その後、user機能を追加。トップをログイン画面にする。まずはマスターを一人作成。  
+あとは何を作るかによって変わる。勤怠管理かメニューか予約システムか  
+今のところは勤怠管理を考えてる
