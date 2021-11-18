@@ -8,9 +8,24 @@
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <!--[if lt IE 9]>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/r29/html5.min.js">
+      </script>
+    <![endif]-->
   </head>
 
   <body>
-    <%= yield %>
+    <header class="navbar sticky-top bg-secondary">
+      <div class="container ">
+        <div class="row w-100 justify-content-between">
+        <%= link_to "山水APP", '#', id: "logo" ,class: " h1 text-light col-4"%>
+        <div class="col-4">
+          <%# ヘッダーの右側 %>
+        </div>
+      </div>
+    </header>
+    <main class="container">
+      <%= yield %>
+    </main>
   </body>
 </html>
