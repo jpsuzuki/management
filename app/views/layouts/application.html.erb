@@ -15,17 +15,21 @@
   </head>
 
   <body>
-    <header class="navbar sticky-top bg-secondary">
+    <header class="navbar sticky-top bg-black">
       <div class="container ">
         <div class="row w-100 justify-content-between">
-        <%= link_to "山水APP", '#', id: "logo" ,class: " h1 text-light col-4"%>
+        <%= link_to "山水APP", root_path, id: "logo" ,class: " h1 text-light col-4"%>
         <div class="col-4">
           <%# ヘッダーの右側 %>
         </div>
       </div>
     </header>
-    <main class="container">
+    <main>
+      <% flash.each do |message_type, message| %>
+        <div class="container my-4 w-80 alert alert-<%= message_type %>"><%= message %></div>
+      <% end %>
       <%= yield %>
+      <%= debug(params) if Rails.env.development? %>
     </main>
   </body>
 </html>

@@ -131,7 +131,7 @@ routes.rbに`root 'static_pages#home'`と記述。
 - 20日にメールを送信、データのリセットをする
 
 ## 開発日記
-- 11/16     
+### 11/16     
 環境構築をした。これでローカルでの開発ができる      
 加えてビューを一つ作ってルートに置いた。また、タイトルも変えれるようにした  
 ひとまずはapp/views/layouts/application.html.erbの編集。bootstrapは使えるようになってるはずなので、ヘッダーを作成する   
@@ -139,7 +139,7 @@ routes.rbに`root 'static_pages#home'`と記述。
 あとは何を作るかによって変わる。勤怠管理かメニューか予約システムか  
 今のところは勤怠管理を考えてる
 
-- 11/17     
+### 11/17     
 レイアウトの作成、usersコントローラを作成。     
 モデルを作成しようと思うが、データ属性を考えないといけない      
 カラオケ屋のを参考にすれば、従業員番号とパスワードと名前をユーザテーブルに作って、それを外部キーとして勤怠情報などのデータを紐付けるか
@@ -148,14 +148,14 @@ routes.rbに`root 'static_pages#home'`と記述。
 `rails g model User name:string number:integer`     
 上記を実行する。バリデーションを記述し、パスワードを追加。その後indexアクションで一覧表示できるようにし、フォームを作成して作ってみて確認したり。
 
-- 11/18     
+### 11/18     
 上記コマンドを実行した時、エラー発生。ルーティングに構文エラー      
 結果、シングルクォーテーションのところにバッククォーテーションを使ってた。  
 modelを作成しようとしたが、numはstringにして正規表現で数字にすべき？フォームさえ気を付ければintegerのが良いか？     
 何にせよ次こそモデルを作る。    
 ↑めんどそうだから整数型で良い
 
-- 11/19     
+### 11/19     
 integerだと 0001 = 1 と認識されるっぽい？   
 stringにしてフォーマットを限定させる形で実装しなおす    
 正規表現だと`ˆ[0-9][0-9][0-9][0-9]$`で４桁の数字になる
@@ -164,10 +164,111 @@ testを行ったらエラー。削除したテストになぜか引っかかっ�
 ↑each文のendを書き忘れてた。テストはグリーン    
 モデルではメモリ内のデータの検証はできるが、データベースでも一意性を保つためにはインデックスを作らないといけない    
 `rails generate migration add_index_to_users_number`    
-```
-    def change
-        add_index :users, :number, unique: true
-    end
-```
+    ```
+        def change
+            add_index :users, :number, unique: true
+        end
+    ```
 `rails db:migrate`
 userモデルの基礎はできた。次はパスワードの追加
+
+
+### 11/23
+- パスワードの追加
+    - モデルに`has_secure_password`と記述     
+        ハッシュ化したパスワードを、データベース内のpassword_digestという属性に保存     
+        2つのペアの仮想的な属性（passwordとpassword_confirmation）が使える      
+        authenticateメソッドが使えるようになる（引数の文字列がパスワードと一致するとUserオブジェクトを、間違っているとfalseを返す
+    - userにpassword_digestを追加
+    `$ rails generate migration add_password_digest_to_users password_digest:string`
+    `rails db:migrate`
+    - gem bcrypt を追加
+- first user(鈴木健太郎,0000,"foobarbaz")
+- routes.rb usersリソース
+- Digestライブラリのhexdigestメソッドを使うと、MD5のハッシュ化できる(やってはいない)
+```
+>> email = "MHARTL@example.COM"
+>> Digest::MD5::hexdigest(email.downcase)
+=> "1fda4469bcbec3badf5418269ffc5968"
+```
+
+### 11/24
+- show,index,editページを追加
+- 登録、編集フォーム作成
+- bcrypt が反映されてないらしく、ユーザオブジェクトが機能しない     
+→ビルドし直す
+- cssでエラー。見直し
+- editのテスト失敗。見直し
+- users リソース
+    HTTPリクエスト	|URL	|アクション	|名前付きルート	|用途
+    -|-|-|-|-
+    GET	|/users	|index	|users_path	|すべてのユーザーを一覧するページ
+    GET	|/users/1	|show	|user_path(user)	|特定のユーザーを表示するページ
+    GET	|/users/new	|new	|new_user_path	|ユーザーを新規作成するページ（ユーザー登録）
+    POST|/users	|create	|users_path	|ユーザーを作成するアクション
+    GET	|/users/1/edit	|edit	|edit_user_path(user)	|id=1のユーザーを編集するページ
+    PATCH	|/users/1	|update	|user_path(user)	|ユーザーを更新するアクション
+    DELETE	|/users/1	|destroy	|user_path(user)	|ユーザーを削除するアクション
+- userモデルにdigestメソッドを定義  
+secure_passwordのソースコードから
+- cssをwebpackのファイルに移動
+- リビルド
+- /signupで無効の送信からのリダイレクトが/usersになる。確認
+- フォームを使って登録、その他アクションを実装
+- ログイン機能追加
+
+### 11/25 
+- 登録フォームで実際に登録を試みる  
+→numberがエラー。おそらくbootstrapがemailと誤認している     
+→フォームをemail_fieldにしているのが原因だった
+- rails g controller アクション名　で、アクションを指定すると、それに対応したビューも作成される
+- form_withではモデルを指定すれば「フォームのactionは/usersというURLへのPOSTである」と自動的に判定      
+セッションはモデルが無いし、urlも/session/newじゃないから、urlを指定してあげる      
+```
+form_with(url: login_path, scope: :session, local: true)
+```
+- sessionコントローラとフォームを作成。機能はまだ
+
+### 11/26
+- application_controller.rbにヘルパーモジュールを読み込ませた   
+`include SessionsHelper`[メソッドをパッケージ化](https://railstutorial.jp/chapters/rails_flavored_ruby?version=6.0#sec-back_to_the_title_helper)
+- log_inメソッドの定義
+- current_userメソッドの定義
+- sessionのcreateアクション
+- log_in?メソッドの定義
+
+- 次やること
+    - ログインのテスト
+    - ログアウト
+
+### 11/27
+#### 実行
+- flashメッセージが表示されるようにレイアウトに記述
+- flash.nowとすることで、その後にリクエストが発生したらflashが消えるように
+- testヘルパーメソッド`is_login?`を定義
+- ログアウト機能(session deleteアクション)を実装
+#### メモ
+- チュートリアルでは登録後に自動でログインされるようにしてあるけど、これは実装しないでおく
+- 
+#### 次
+- 認可機能
+- レイアウト
+
+
+### 11/28
+#### 実行
+- user edit パスワードなしでも変更できるように、モデルにallow nilと記述
+- before_action追加
+- log_in_asテストヘルパーメソッドを定義
+- インテグレーションテストのヘルパーは、同じファイルでも`ActionDispatch::IntegrationTest`クラスに記述
+#### メモ
+- integration/users_edit_testがエラー。log_in_asテストヘルパーメソッドをインテグレーションテストでも定義        
+クリア
+- sessions_controller_testもエラー。別件っぽい      
+↑sessipn_new_urlにアクセスする記述をlogin_pathに直したらクリア
+#### 次
+- 認可機能
+- adminユーザ
+
+
+

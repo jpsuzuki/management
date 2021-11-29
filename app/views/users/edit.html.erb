@@ -1,16 +1,16 @@
-<% provide(:title, "新規登録") %>
+<% provide(:title, "ユーザ情報の編集") %>
 
 
 <div class="row justify-content-center py-5">
     <div class="col-md-6 col-md-offset-3 p-4 bg-white">
-        <h1 class="text-center mb-3">新規登録</h1>
+        <h1 class="text-center mb-3">ユーザ情報の編集</h1>
         <%= form_with(model: @user, local: true) do |f| %>
             <%= render 'shared/error_messages' %>
-
+            
             <%= f.label :name, "名前" %>
             <%= f.text_field :name, class: "form-control" %>
 
-            <%= f.label :number, "４桁の番号" %>
+            <%= f.label :number, "4桁の番号" %>
             <%= f.text_field :number, class: "form-control" %>
 
             <%= f.label :password, "パスワード" %>
@@ -19,8 +19,7 @@
             <%= f.label :password_confirmation, "パスワードを確認" %>
             <%= f.password_field :password_confirmation, class: "form-control" %>
 
-            <%= f.submit "ユーザを作成", class: "btn btn-primary w-100 mt-3" %>
+            <%= f.submit "変更", class: "btn btn-primary w-100 mt-3" %>
         <% end %>
     </div>
 </div>
-
