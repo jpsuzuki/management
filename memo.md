@@ -270,5 +270,81 @@ form_with(url: login_path, scope: :session, local: true)
 - 認可機能
 - adminユーザ
 
+### 12/1
+#### 実行
+- before_action current_user
+- user_controller_test
+- admin属性追加
+####　メモ
+- rails t　失敗     
+log_in_asメソッドのuser.numberが効かない
+⇨setupで@other_userを定義していなかった
+- フレンドリーフォワーディングは実装せずスキップ    
+新規ユーザフォーム⇨管理者ログイン⇨ユーザフォームなると便利？
+- ページネーション機能。勤怠情報は23日分ほどあるので使うか？       
+ユーザ一覧では使わないからスキップ
+- before_action admin_userでフラッシュを追加する
+- 認可機能は複雑になりそうなので、とりあえず使うべきデータを用意する？何にせよ設計を考えないといけない
+- ログイン時にリダイレクト先を分岐。adminでif分岐
+#### 次
+- 10.4.1の演習にあるテスト  
+web経由でのadmin属性変更禁止のテスト
+- ユーザ削除のテスト
+- before_action admin_userでフラッシュを追加する
+- ページ設計、認可設計
+
+### 12/2
+#### 実行
+- user_controller_test
+    - admin権限をwebで与えない
+    - before action admin user
+- before action admin user にindex アクションも追加
+- login時にadminは別ページにする様分岐
+    - login test のuser をarcherに
+
+####　メモ
+- timeモデル作成のため、現在時刻を取得する方法を調べる
+    - Time.nowで現在時刻、メソッドチェーンで時間のみとかできるっぽい
+    - rubyでのメソッドらしい。railsは別の方法をした方が良い？
+
+#### 次
+- 現在時刻の取得方法調べる。
+- 日本時間に設定
+- 時間計算
+
+### 12/4
+#### 実行
+- docker-composeファイルの環境変数を設定    
+環境変数は設定できたが、Time.nowは変わらなかった。調べる    
+環境変数設定時、`TZ='Asia/Tokyo'`だと失敗。`TZ=Asia/Tokyo`で動く
+- application.rbにタイムゾーンを設定    
+    - rails c `Time.current`は日本時間になった
+    - `Time.now`はこれでは変わらない
+    - config.active_record.default_timezoneはDBに読み書きする時刻に影響する
+    - [参考](https://qiita.com/aosho235/items/a31b895ce46ee5d3b444)
+- workモデルを作成。    
+    `rails g model Work start:time end:time day:date user:references`
+####　メモ
+- Timeメソッドで現在時刻の取得に成功。
+- 次はどうやってデータベースに保存するか、またどうやって計算するか
+```
+# 年
+Time.current.year
+=> 2020
+
+# 月
+Time.current.month
+=> 6
+
+# 日付
+Time.current.day
+=> 7
+```
+- 日付は出勤時の時間    
+退勤時間ー出勤時間＝労働時間    
+退勤時間＜出勤時間（24時を越した場合の計算）    
+#### 次
+- 
+
 
 

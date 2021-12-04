@@ -7,7 +7,12 @@ class SessionsController < ApplicationController
     log_out if logged_in?
     if user && user.authenticate(params[:session][:password])
       log_in user
-      redirect_to user
+      if user.admin?
+        # ここに管理者がリダイレクトするページを記述
+        redirect_to user
+      else
+        redirect_to user
+      end
     else
       flash.now[:danger] = '番号とパスワードの組み合わせが正しくありません' 
       render 'new'

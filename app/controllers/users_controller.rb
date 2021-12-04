@@ -1,8 +1,10 @@
 class UsersController < ApplicationController
-  before_action :logged_in_user, only: [:show, :edit, :update]
+  before_action :logged_in_user, only: [:index, :show, :edit, :update, :destroy]
+  before_action :correct_user,   only: [:show, :edit, :update]
+  before_action :admin_user,     only: [:index, :destroy]
 
   def index
-    
+    @users = User.all
   end
   
   def show
@@ -38,7 +40,9 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    
+    User.find(params[:id]).destroy
+    flash[:success] = "削除しました"
+    redirect_to users_url
   end
 
   private
@@ -53,9 +57,24 @@ class UsersController < ApplicationController
     # ログイン済みユーザーかどうか確認
     def logged_in_user
       unless logged_in?
-        flash[:danger] = "Please log in."
+        flash[:danger] = "ログインしてください"
         redirect_to login_url
       end
     end
+
+    # 正しいユーザーかどうか確認
+    def correct_user
+      @user = User.find(params[:id])
+      redirect_to(root_url) unless current_user?(@user)
+    end
+
+    # 管理者かどうか確認
+    def admin_user
+      unless current_user.admin?
+        flash[:danger] = "権限がありません"
+        redirect_to(root_url) 
+      end
+    end
+
 
 end

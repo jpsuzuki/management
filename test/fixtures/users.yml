@@ -3,3 +3,9 @@ michael:
   name: Michael Example
   number: 1000
   password_digest: <%= User.digest('password') %>
+  admin: true
+
+archer:
+  name: Sterling Archer
+  number: 1001
+  password_digest: <%= User.digest('password') %>

@@ -21,6 +21,7 @@ class ActiveSupport::TestCase
   end
 
 end
+
 class ActionDispatch::IntegrationTest
   # テストユーザとしてログイン
   def log_in_as(user, password: 'password')
@@ -28,4 +29,5 @@ class ActionDispatch::IntegrationTest
         number: user.number, password: password
     }}
   end
+  
 end
