@@ -1,0 +1,10 @@
+<% provide(:title, '勤怠情報') %>
+<h1>勤怠情報</h1>
+
+<ul class="works">
+  <% @works.each do |work| %>
+    <li>
+      <%= link_to work.day, edit_work_path(work) %>
+    </li>
+  <% end %>
+</ul>

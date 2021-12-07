@@ -324,22 +324,23 @@ web経由でのadmin属性変更禁止のテスト
     - [参考](https://qiita.com/aosho235/items/a31b895ce46ee5d3b444)
 - workモデルを作成。    
     `rails g model Work start:time end:time day:date user:references`
-####　メモ
+
+#### メモ
 - Timeメソッドで現在時刻の取得に成功。
 - 次はどうやってデータベースに保存するか、またどうやって計算するか
-```
-# 年
-Time.current.year
-=> 2020
+    ```
+    # 年
+    Time.current.year
+    => 2020
 
-# 月
-Time.current.month
-=> 6
+    # 月
+    Time.current.month
+    => 6
 
-# 日付
-Time.current.day
-=> 7
-```
+    # 日付
+    Time.current.day
+    => 7
+    ```
 - 日付は出勤時の時間    
 退勤時間ー出勤時間＝労働時間    
 退勤時間＜出勤時間（24時を越した場合の計算）    
@@ -350,5 +351,49 @@ Time.current.day
 - コントローラも作ってアクションも整えてからテストを書いた方が良い？
 - その際はルーティングも設定する
 
+### 12/5
+#### 実行
+- work の end を finish に変更  
+rails db:rollbackからの変更、migrate
+- controllerにアクションだけ設定
+- ルーティング設定(show以外)
+#### メモ
+- timeオブジェクトはなかなか複雑そうなのでpatch処理が難しそう？
+- フォームで送ったデータがどのようなオブジェクトとなるのか、コントローラを設計して、コマンドで確認する必要あり
+- 出勤打刻忘れはpatchではどうにもならんから、indexで日付一覧を表示、クリックした日付がwork.dateにない場合、createする
+- もしくはとりあえず打刻してもらって、日付も変えられる様にする
+- action
+    - index 日付で一覧を作る
+    - new indexから。work.dayがない場合に表示される
+    - show いらんくね？
+    - create 出勤ボタンとnewからの処理を分けるため、postされたデータがnilだったかどうかで、startのみTime.currentで設定する
+    - edit indexから
+    - update 退勤ボタンとeditからの処理
+    - delete いる？一応つけるか
+- 出勤ボタンでuserの状態を変更させるworkingカラムを追加。   
+    - となるとボタンはworkリソースとは別にアクションを用意すべきか？
+#### next
+- とりあえずリソースを完成させる。まずはnew,create,index
+- 日付をeachで足していき、@works.allをfindして、一緒であれば情報を、なければnewにその日付を渡してやる
+- つまりindexから作る
 
+- やっぱり@worksをeach文でeditのリンクを作る。下に新規作成フォームを作る
+- link_tagのclassをd-blockにして、divで囲んでclassをbtnにしてやると、親であるdivにリンクが広がってボタンになるかも？grow_appのリストを参考にして作る
+- つまり新規作成フォームを作る(new)
+
+### 12/7
+#### do
+- before action login user?をapplication_controllerに。これでどのコントローラでも使える
+- エラーメッセージパーシャルが@userを参照していたのを、f.objectに。 
+呼び出しで`object: f.object`と定義し、パーシャル内の@userと記述されていたところをobjectに。
+- workモデルに`, dependent: :destroy`親が削除されたら子も削除される
+- workcontrollerに記述。ストロングパラメータ、createアクション
+#### memo
+- 打刻ボタンは別のコントローラで作る
+#### next
+
+### 12/
+#### do
+#### memo
+#### next
 

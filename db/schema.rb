@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(version: 2021_12_04_073816) do
 
   create_table "works", force: :cascade do |t|
     t.time "start"
-    t.time "end"
+    t.time "finish"
     t.date "day"
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
