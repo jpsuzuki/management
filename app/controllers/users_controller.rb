@@ -1,7 +1,8 @@
 class UsersController < ApplicationController
-  before_action :logged_in_user, only: [:index, :show, :edit, :update, :destroy]
-  before_action :correct_user,   only: [:show, :edit, :update]
-  before_action :admin_user,     only: [:index, :destroy]
+  before_action :logged_in_user
+  before_action :correct_user,   only: [:edit, :update]
+  # before_action :admin_user,     only: [:new, :index, :destroy]
+  before_action :admin_or_current,  only:[:show, :works]
 
   def index
     @users = User.all
@@ -45,6 +46,11 @@ class UsersController < ApplicationController
     redirect_to users_url
   end
 
+  def works
+    @user = User.find(params[:id])
+    @works = @user.works
+  end
+
   private
 
     def user_params
@@ -67,6 +73,15 @@ class UsersController < ApplicationController
         redirect_to(root_url) 
       end
     end
+
+    # 管理者か本人のみ見れる
+    def admin_or_current
+      user = User.find(params[:id])
+      unless current_user.admin? || current_user?(user)
+          flash[:danger] = "権限がありません"
+          redirect_to(root_url)
+      end
+  end
 
 
 end

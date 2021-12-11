@@ -392,8 +392,100 @@ rails db:rollbackからの変更、migrate
 - 打刻ボタンは別のコントローラで作る
 #### next
 
-### 12/
+### 12/8
+#### do
+#### memo
+- 打刻ボタンのコントローラ
+    - post 出勤
+    - patch 退勤
+- work のリソースを見直し  
+    - index 
+        - user_idを渡して指定したユーザのwork一覧を表示する
+        - 一般ユーザがアクセスする場合はcurrent_user.idを引数に。adminがアクセスする場合はuser index からuser.idを引数に
+    - before action  
+        - admin or current を作成
+        - adminでなければidがcurrentと一致するか検証して違えば戻ってフラッシュメッセ
+
+- チュートリアルのフォロー機能のところに、参考になりそうな記述あり
+    - `has_many :following, through: :active_relationships, source: :followed`  
+    モデルの関連付け。1userはモデルの複数followed情報をもつ。これをuser.followingで参照できる
+    - user/1/followingのようにユーザのもつ別モデルのルーティング
+        ```
+        resources :users do
+            member do
+                get :following, :followers
+            end
+        end
+        ```
+
+        HTTPリクエスト|	URL|	アクション|	名前付きルート
+        -|-|-|-
+        GET|	/users/1/following|	following|	following_user_path(1)
+        GET|	/users/1/followers|	followers|	followers_user_path(1)
+
+        - アクションはuserに定義。createとdestroyのみ専用のコントローラで。
+    
+
+#### next
+- url設計について見直し
+    - /users/1/following はできるけど　/users/1/following/1 はできるか  
+    ↑idで指定するなら、work controller内でshow,editはする？
+    - before action 各ページを誰が見れる様にするか  
+    ↑全てのアクションを並べて見直し
+
+- 時給も設定するつもりだけどどんなアクションが必要？
+
+### 12/9
+#### do
+- usersリソースをネストしてworksアクションを定義
+- views/usersにworks.html.erb追加
+#### memo
+- dockerのwebが立たない
+    - logを見るに、ルーティングの構文エラーで追い出された様子
+    - buildしなかったのはネットのせい。繋がる場所ではビルドできた。でもup -d だけでよかった
+
+- worksに月の情報も必要？   
+    - Time.current.monthはinteger型
+    - 20日以上は次の月扱いで+1    
+    - ↑13月を作らない様に注意
+
+#### next
+- user.showに乗っけるリンクを表示
+- workオブジェクトを作る、編集するフォーム
+
+### 12/10
+#### do
+- showにリンクボタン作成
+- work一覧、ない場合の記述
+- workのフォーム作成
+- work create アクション
+- work一覧の表示の整え
+#### memo
+- 時間のオブジェクトがDBとRoRで違うせいで表示がバグる。メソッドを繋げて整えた
+- 一覧に変な表示が。原因を探る
+
+#### next
+- work updateの見直し見直し(本人のみできるように)
+- work一覧の表示の整え(変な表示を消す)      
+    each文の頭の=を消したら治った
+- work before action
+    - new,create - current userのものしか作れない
+    - edit, update - params(:id)を使うので、権限付与が必要
+    - destroy - 未実装。before actionは必要そう
+- workを編集してもworks一覧に反映されないバグを治す
+
+### 12/11
+#### do
+- worksの時間を表示するヘルパーメソッドを追加
+- worksのビューの直し
+#### memo
+- 就業時間を算出するヘルパーを作成するも、使えない
+    - おそらくメソッド内で定義した変数が継承されないのが原因。見直し
+#### next
+- 就業時間算出メソッド
+- work before action
+
+### 12/12
 #### do
 #### memo
 #### next
-

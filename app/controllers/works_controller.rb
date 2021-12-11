@@ -1,14 +1,14 @@
 class WorksController < ApplicationController
     before_action :logged_in_user, only:[:index,:new,:edit,
                                         :create,:update,:destroy]
-    def index
-    end
+    # before_action :admin_or_current, only:[:]
 
     def new
         @work = current_user.works.build if logged_in?
     end
 
     def edit
+        @work = Work.find(params[:id])
     end
 
     def create
@@ -22,6 +22,13 @@ class WorksController < ApplicationController
     end
 
     def update
+        @work = Work.find(params[:id])
+        if @work.update(work_params)
+            flash[:success] = "情報の変更に成功しました"
+            redirect_to works_user_path(current_user)
+        else
+            render 'edit'
+        end
     end
 
     def destroy
@@ -29,6 +36,20 @@ class WorksController < ApplicationController
 
     private
         def work_params
-            params.require(:work).parmit(:day,:start,:finish)
+            params.require(:work).permit(:day,:start,:finish)
+        end
+
+        # 正しいユーザーかどうか確認
+        def correct_user
+            @user = User.find(params[:id])
+            redirect_to(root_url) unless current_user?(@user)
+        end
+
+        def admin_or_current
+            user = User.find(params[:id])
+            unless current_user.admin? || current_user?(user)
+                flash[:danger] = "権限がありません"
+                redirect_to(root_url)
+            end
         end
 end
