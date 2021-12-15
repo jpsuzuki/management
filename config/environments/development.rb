@@ -62,4 +62,7 @@ Rails.application.configure do
 
   # 追加コード
   config.reload_classes_only_on_change = false
+
+  # ホワイトリスト追加
+  config.web_console.whitelisted_ips = '172.18.0.1'
 end

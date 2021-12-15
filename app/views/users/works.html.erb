@@ -1,20 +1,41 @@
 <% provide(:title, @user.name+"さんの勤怠情報") %>
 <div class="container pt-3">
-  <% if @user.works.any? %>
+  <div class="d-flex justify-content-between my-3">
+    <div>
+      <%= link_to "＜先月分" ,
+      {controller: "users", id: @user, action: "works",date: @date.last_month},
+                                class:"btn btn-outline-secondary d-block"%> 
+    </div>
+    <div class="h2">
+      <%= @date.month %>月分
+    </div>
+    <div>
+      <%= link_to "翌月分＞" ,
+      {controller: "users", id: @user, action: "works",date: @date.next_month},
+                                class:"btn btn-outline-secondary d-block"%> 
+    </div>
+  </div>
+  <% if @works.any? %>
     <ol class="works list-group">
       <% @works.each do |work|%>
-        <li class="list-group-item d-flex justify-content-between">
+        <li class="list-group-item d-flex justify-content-between py-3">
           <div class="h3 mb-0 mt-1">
-            <%= work.day.day %>日  <%=start_time(work) %>〜<%= finish_time(work) %>
+            <%= work_date(work) %>  <%=start_time(work) %>〜<%= finish_time(work) %>
           </div>
-          <%= link_to "編集", edit_work_path(work), class: "btn btn-primary" %>
+          <div class="d-flex" >
+            <div class="mr-2" >
+              <%= link_to "編集", edit_work_path(work), class: "btn btn-outline-secondary" %>
+            </div>
+            <div>
+              <%= link_to "削除", work_path(work), method: :delete , class: "btn btn-outline-danger",
+                          data: {confirm: "本当に削除しますか？"} %>
+            </div>
+          </div>
+          
         </li>
-        <% w_min_cal(work)%>
+
       <% end %>
     </ol>
-    <div class="d-flex">
-    合計就業時間 <%= w_time(w_min)%>
-    </div>
   <% else %>
     <%= @user.name %>さんの勤怠情報はありません
   <% end %>

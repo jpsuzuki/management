@@ -9,9 +9,9 @@ class SessionsController < ApplicationController
       log_in user
       if user.admin?
         # ここに管理者がリダイレクトするページを記述
-        redirect_to user
+        redirect_to users_path
       else
-        redirect_to user
+        redirect_to root_path
       end
     else
       flash.now[:danger] = '番号とパスワードの組み合わせが正しくありません' 
@@ -21,7 +21,7 @@ class SessionsController < ApplicationController
 
   def destroy
     log_out if logged_in?
-    redirect_to root_url
+    redirect_to login_url
   end
   
 end

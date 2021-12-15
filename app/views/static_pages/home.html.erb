@@ -1,36 +1,24 @@
-<% provide(:title, "Home") %>
-<h1>StaticPages#home</h1>
-<p>Find me in app/views/static_pages/home.html.erb</p> 
-<%# <%= link_to "登録", signup_path, class: "btn btn-primary" %>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
-<p>aaaaaaaaaaaaaaaaaaaaaaa</p>
+<% provide(:title, "トップページ") %>
+<div class="container">
+    従業員番号 : <%= @user.number %><br>名前 : <%= @user.name %>
+    <div class="row pt-3">
+        <div class="col">
+            <% if @user.working? %>
+                <%= link_to "退勤", working_path, method: :patch, class:"btn btn-secondary" %>
+            <% else %>
+                <%= link_to "出勤", working_path, method: :post, class:"btn btn-success" %>
+            <% end %>
+        </div>
+        <div class="col">
+        <%= link_to "ユーザ情報変更", edit_user_path(@user),
+                                class:"btn btn-primary d-block" %>
+        </div>
+        <div class="col">
+        <%= link_to "勤怠情報一覧",
+        {controller: "users", id: @user, action: "works",date: Date.today},
+                                class:"btn btn-primary d-block" %>
+        </div>
+        <div class="col"><%= link_to "ログアウト", logout_path, 
+        method: :delete,class: "btn btn-danger d-block" %></div>
+    </div>
+</div>

@@ -1,20 +1,23 @@
 <% provide(:title, @user.name) %>
 <div class="container">
-    従業員番号：<%= @user.number %><br>名前：<%= @user.name %>
+    従業員番号 : <%= @user.number %><br>名前 : <%= @user.name %>
     <div class="row pt-3">
-        
+        <div class="col">
+            <% if current_user.working? %>
+                <%= link_to "退勤", working_path, method: :patch, class:"btn btn-secondary" %>
+            <% else %>
+                <%= link_to "出勤", working_path, method: :post, class:"btn btn-success" %>
+            <% end %>
+        </div>
         <div class="col">
         <%= link_to "ユーザ情報変更", edit_user_path(@user),
                                 class:"btn btn-primary d-block" %>
         </div>
         <div class="col">
-        <%= link_to "勤怠情報一覧", works_user_path(@user),
+        <%= link_to "勤怠情報一覧", {controller: "users", id: @user, action: "works",month: Time.current.month},
                                 class:"btn btn-primary d-block" %>
         </div>
         <div class="col"><%= link_to "ログアウト", logout_path, 
         method: :delete,class: "btn btn-danger d-block" %></div>
     </div>
-    
-    
-    
 </div>

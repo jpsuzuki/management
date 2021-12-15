@@ -1,6 +1,7 @@
 class WorksController < ApplicationController
     before_action :logged_in_user, only:[:index,:new,:edit,
                                         :create,:update,:destroy]
+
     # before_action :admin_or_current, only:[:]
 
     def new
@@ -32,6 +33,14 @@ class WorksController < ApplicationController
     end
 
     def destroy
+        @work = current_user.works.find(params[:id])
+        if @work.destroy
+            flash[:success] = "削除しました"
+            redirect_to works_user_path(@current_user)
+        else
+            flash[:danger] = "失敗しました"
+            redirect_to works_user_path(@current_user)
+        end
     end
 
     private

@@ -4,11 +4,12 @@ Rails.application.routes.draw do
   get    '/login',   to: 'sessions#new'
   post   '/login',   to: 'sessions#create'
   delete '/logout',  to: 'sessions#destroy'
-  resources :users do 
-    member do
-      get :works
-    end
-  end
+  resources :users
+  get 'users/:id/works/:date', to:'users#works'
+
   resources :works, only:[:new, :edit,
                           :create,:update,:destroy]
+  post '/working',  to: 'working_buttons#start'
+  patch '/working',  to: 'working_buttons#finish'
+
 end

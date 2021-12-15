@@ -478,6 +478,7 @@ rails db:rollbackからの変更、migrate
 #### do
 - worksの時間を表示するヘルパーメソッドを追加
 - worksのビューの直し
+- git push workのフォーム、一覧作成
 #### memo
 - 就業時間を算出するヘルパーを作成するも、使えない
     - おそらくメソッド内で定義した変数が継承されないのが原因。見直し
@@ -487,5 +488,70 @@ rails db:rollbackからの変更、migrate
 
 ### 12/12
 #### do
+- ホワイトリストに追加  memo参照
+- worksの並び替え   日付順に    
+    orderメソッドで解決
 #### memo
+- `Completed 500 Internal Server Error in oooms`    
+    就業時間を
+- ホワイトリストに追加
+    ```
+    web_1  | Started GET "/" for 172.18.0.1 at 2021-12-12 15:20:20 +0900
+    web_1  | Cannot render console from 172.18.0.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+    ```
+    ネットワークエラーっぽい。[参考](https://qiita.com/terufumi1122/items/73da039e6fc90ee0a63f)
+
+- 勤怠時間計算はまた時間を置いて考える。次は打刻ボタンを作る
 #### next
+- 打刻ボタン    
+    workにworkinng属性をつけた方がいい説    
+    出勤ボタンでtrue、退勤ボタンでfalse。別のフォームだとfalseみたいな
+
+### 12/13、14
+#### do
+- finish = nilの場合の表示修正
+- rails generate migration add_working_to_users working:integer
+- rails g working_buttons
+    - start,finishアクションの定義
+- 打刻ボタン作成
+#### memo
+- 打刻コントローラ
+    - セッションコントローラを参考に、コントローラを指定してフォームを作成
+    - コントローラ側でデータを作るならフォームは複数モデルを指定しなくて良いのでは？
+    - であればコントローラもuserで良い？
+    - userのworkingの論理値を変更
+
+- work を時系列順に並び替える時、startはdatetimeの方が便利では？そうすればdayカラムがいらなくなる？     
+    でもフォームかパラメータの設定が変わる？またfinishとの計算の記述も変わるか      
+    dayだけdatetimeにする？それもフォームで困るか
+    - 複数カラムを指定して優先順みたいなソートはできないだろうか？
+#### next
+- work.destroyを可能に
+- 打刻ボタンで作成したデータの編集  
+秒単位まで記録されるがそこをいじれない
+- adminの管理画面
+
+### 12/15
+#### do
+- work delete実装
+- リソースフルでないリンクの作成
+    - users/:id/works/:month
+    - 月を指定できるように
+    - 年明けに困りそう。:monthではなく:dateで
+- work月別表示
+#### memo
+- adminコントローラ作成？
+- adminに必要なアクション類を実装⇨indexのビューを整える
+- urlに月情報を追加     
+    - 入力された月を元に、その前の月の20日からその月の19日を指定するメソッドを定義
+    - workから指定したレンジに絞り込み
+
+```
+@work = user.works.where(day: 先月の20日..今月の19日)
+=>指定した範囲のworkオブジェクト一覧
+```
+#### next
+- work一覧の表示    
+月情報ごとに表示する    
+先月の情報、翌月の情報(Time.currentと比較するなど)
+- 
