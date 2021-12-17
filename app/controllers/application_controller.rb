@@ -10,4 +10,11 @@ class ApplicationController < ActionController::Base
             end
         end
 
+        def admin_user
+            unless current_user.admin?
+              flash[:danger] = "権限がありません"
+              redirect_to(root_url) 
+            end
+        end
+
 end

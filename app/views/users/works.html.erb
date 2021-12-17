@@ -16,6 +16,14 @@
     </div>
   </div>
   <% if @works.any? %>
+    <div class="d-flex justify-content-between py-3" >
+      <div class="h3" >
+        合計就業時間 : <%= @w_time.div(60) %>時間<%= @w_time%60 %>分
+      </div>
+      <div class="h3" >
+        給料 : <%= (@money*@w_time).to_i%>円
+      </div>
+    </div>
     <ol class="works list-group">
       <% @works.each do |work|%>
         <li class="list-group-item d-flex justify-content-between py-3">
@@ -31,14 +39,13 @@
                           data: {confirm: "本当に削除しますか？"} %>
             </div>
           </div>
-          
         </li>
-
       <% end %>
     </ol>
   <% else %>
     <%= @user.name %>さんの勤怠情報はありません
   <% end %>
+  
   <div class="row pt-3">
     <div class="col">
     <%= link_to "勤怠情報を追加", new_work_path,

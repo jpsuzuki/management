@@ -2,12 +2,12 @@
 
 one:
   start: 2021-12-04 16:38:16
-  end: 2021-12-04 16:38:16
+  finish: 2021-12-04 16:38:16
   day: 2021-12-04
-  user: one
+  user: archer
 
 two:
   start: 2021-12-04 16:38:16
-  end: 2021-12-04 16:38:16
+  finish: 2021-12-04 16:38:16
   day: 2021-12-04
-  user: two
+  user: archer

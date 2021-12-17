@@ -11,5 +11,6 @@ Rails.application.routes.draw do
                           :create,:update,:destroy]
   post '/working',  to: 'working_buttons#start'
   patch '/working',  to: 'working_buttons#finish'
+  patch '/rights/user_update', to:'rights#user_update'
 
 end

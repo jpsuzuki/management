@@ -20,7 +20,8 @@ class WorkingButtonsController < ApplicationController
 
   private
     def work_start
-      { day: Time.current, start: Time.current }
+      now = Time.at(Time.current.to_i/60*60)
+      { day: Date.current, start: now }
     end
 
     def add_working(work)
@@ -28,7 +29,8 @@ class WorkingButtonsController < ApplicationController
     end
 
     def work_finish
-      { finish: Time.current }
+      now = Time.at(Time.current.to_i/60*60)
+      { finish: now }
     end
 
     def remove_working

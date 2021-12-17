@@ -1,24 +1,24 @@
 <% provide(:title, "トップページ") %>
-<div class="container">
+<div class="container mt-4">
     従業員番号 : <%= @user.number %><br>名前 : <%= @user.name %>
     <div class="row pt-3">
         <div class="col">
             <% if @user.working? %>
-                <%= link_to "退勤", working_path, method: :patch, class:"btn btn-secondary" %>
+                <%= link_to "退勤", working_path, method: :patch, 
+                    class:"btn btn-outline-secondary d-block p-4 align-center fs-1 h-100 lh-lg" %>
             <% else %>
-                <%= link_to "出勤", working_path, method: :post, class:"btn btn-success" %>
+                <%= link_to "出勤", working_path, method: :post,
+                    class:"btn btn-outline-success d-block p-4 align-center fs-1 h-100 lh-lg" %>
             <% end %>
         </div>
-        <div class="col">
-        <%= link_to "ユーザ情報変更", edit_user_path(@user),
-                                class:"btn btn-primary d-block" %>
+        <div class="col list-group">
+            <%= link_to "ユーザ情報変更", edit_user_path(@user),
+                class:"list-group-item list-group-item-action text-center" %>
+            <%= link_to "勤怠情報一覧",
+            {controller: "users", id: @user, action: "works",date: Date.today},
+                                    class:"list-group-item list-group-item-action text-center " %>
+            <%= link_to "ログアウト", logout_path, 
+            method: :delete,class: "list-group-item list-group-item-action text-center list-group-item-danger " %>
         </div>
-        <div class="col">
-        <%= link_to "勤怠情報一覧",
-        {controller: "users", id: @user, action: "works",date: Date.today},
-                                class:"btn btn-primary d-block" %>
-        </div>
-        <div class="col"><%= link_to "ログアウト", logout_path, 
-        method: :delete,class: "btn btn-danger d-block" %></div>
     </div>
 </div>

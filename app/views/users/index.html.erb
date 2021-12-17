@@ -1,11 +1,29 @@
 <% provide(:title, 'ユーザ一覧') %>
 <div class="container">
-<h1>ユーザ一覧</h1>
-
-<ul class="users list-group">
+<div class="my-4 d-flex justify-content-between">
+  <div>
+    <h1 class="ml-3" >ユーザ一覧</h1>
+  </div>
+  <div>
+    <%= link_to "新規従業員登録", new_user_path,class:"btn btn-outline-secondary mt-1" %>
+  </div>
+</div>
+<ul class="users list-group" >
   <% @users.each do |user| %>
-    <li class="list-group-item">
-      <%= link_to user.name, user %>
+    <li class="list-group-item d-flex justify-content-between">
+      <div class="h3 mb-0 mt-1">
+        <%=  user.name %>
+      </div>
+      <div class="a">
+        <%= link_to "勤怠情報",
+        {controller: "users", id: user.id, action: "works",date: Date.today},
+                                class:"btn btn-outline-secondary" %>
+        
+        <%= link_to "編集(時給など)", user, class:"btn btn-outline-secondary " %>
+        <%= link_to "削除", user, method: :delete, 
+        data: {confirm: "ユーザ情報と一緒に勤怠情報も削除されます"},
+        class: "btn btn-danger" %>
+      </div>
     </li>
   <% end %>
 </ul>

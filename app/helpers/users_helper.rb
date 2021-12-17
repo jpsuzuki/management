@@ -26,6 +26,16 @@ module UsersHelper
     end
   end
 
+  # def all_working(works)
+  #   working = 0
+  #   works.each do |work|
+  #     working += work.finish.to_i-work.start.to_i
+  #   end
+  #   min = working.div(60)%60
+  #   hour = working.div(60).div(60)
+  # end
+
+
 
   # def w_min_cal(work)
   #   if @w_min?

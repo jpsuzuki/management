@@ -5,7 +5,15 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
   #   assert true
   # end
 
-  test "invalid signup information" do
+  def setup
+    @admin = users(:michael)
+  end
+
+  test "invalid sign up" do
+    # log_in_as(@user)
+    # get signup_path
+    # assert_redirected_to login_path
+    log_in_as(@admin)
     get signup_path
     assert_no_difference 'User.count' do
       post users_path, params: { user: { name:  "",

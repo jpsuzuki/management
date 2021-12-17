@@ -535,11 +535,12 @@ rails db:rollbackからの変更、migrate
 #### do
 - work delete実装
 - リソースフルでないリンクの作成
-    - users/:id/works/:month
+    - users/:id/works/:date
     - 月を指定できるように
-    - 年明けに困りそう。:monthではなく:dateで
 - work月別表示
 #### memo
+- works を月毎に表示できるように。
+    - :monthの数字情報だと年明け困りそうだったから、:dateでdate型情報を格納
 - adminコントローラ作成？
 - adminに必要なアクション類を実装⇨indexのビューを整える
 - urlに月情報を追加     
@@ -551,7 +552,34 @@ rails db:rollbackからの変更、migrate
 =>指定した範囲のworkオブジェクト一覧
 ```
 #### next
-- work一覧の表示    
-月情報ごとに表示する    
-先月の情報、翌月の情報(Time.currentと比較するなど)
+- adminのuser編集フォーム
+    - userにmoneyカラム追加
+- user/indexにリンクを貼る
+- 計算機能
+
+### 12/16
+#### do
+- 打刻ボタンの改善  
+    - [秒を切り捨て](https://qiita.com/labocho/items/b038ffb86798809b77d3)
+- 就業時間、給料計算
+- moneyカラム、編集ページ、アクション
+#### memo
+#### next
+- work の delete,update後のリダイレクトを修正
+- 各アクションのテストを実装
+
+### 12/17
+#### do
+- workのリダイレクト先を修正
+- テスト
+    - signup
+    - login
+- ヘッダーレイアウト
 - 
+#### memo
+- ログインの統合テスト。sessionが取り扱えないからコントローラにPOSTリクエストしてログイン状態にさせる   
+    ただ、参照はできるようで`assert session[:user_id]==@user.id`が実行できた
+- render で別のコントローラのビューを表示させることに成功
+#### next
+- 失敗時のrender確認
+- user controller test

@@ -14,9 +14,10 @@ class WorksController < ApplicationController
 
     def create
         @work = current_user.works.build(work_params)
+        date = @work.day
         if @work.save
             flash[:success] = "勤怠情報を作りました"
-            redirect_to current_user
+            redirect_to controller: "users", id: @current_user.id, action: "works",date: date
         else
             render 'new'
         end
@@ -24,22 +25,26 @@ class WorksController < ApplicationController
 
     def update
         @work = Work.find(params[:id])
+        user = @work.user
+        date = @work.day
         if @work.update(work_params)
             flash[:success] = "情報の変更に成功しました"
-            redirect_to works_user_path(current_user)
+            redirect_to controller: "users", id: user.id, action: "works",date: date
         else
             render 'edit'
         end
     end
 
     def destroy
-        @work = current_user.works.find(params[:id])
+        @work = Work.find(params[:id])
+        user = @work.user
+        date = @work.day
         if @work.destroy
             flash[:success] = "削除しました"
-            redirect_to works_user_path(@current_user)
+            redirect_to controller: "users", id: user.id, action: "works",date: date
         else
             flash[:danger] = "失敗しました"
-            redirect_to works_user_path(@current_user)
+            redirect_to controller: "users", id: user.id, action: "works",date: date
         end
     end
 
