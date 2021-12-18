@@ -583,3 +583,9 @@ rails db:rollbackからの変更、migrate
 #### next
 - 失敗時のrender確認
 - user controller test
+
+### 12/18
+#### 資料集め
+- [unicornについて](https://www.autovice.jp/articles/146)
+- []
+#### next
