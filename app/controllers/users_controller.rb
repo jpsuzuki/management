@@ -76,7 +76,7 @@ class UsersController < ApplicationController
 
     def this_month
       @date = @date.next_month.beginning_of_month if @date.day > 19
-      head = Date.new(@date.year,@date.last_month.month,20)
+      head = Date.new(@date.last_month.year,@date.last_month.month,20)
       foot = Date.new(@date.year,@date.month,19)
       head..foot
     end
@@ -97,6 +97,4 @@ class UsersController < ApplicationController
           redirect_to(root_url)
       end
     end
-
-
 end

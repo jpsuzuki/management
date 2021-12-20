@@ -5,7 +5,7 @@
 ## 初期設定
 ### dockerfile
 基本的に、コンテナ内で実行するコマンドが記述されてる    
-`COPY　ローカルディレクトリ　コンテナ内`の読み方
+`COPY ローカルディレクトリ コンテナ内`の読み方
 
 ### entrypoint
 setでシェルの設定を確認。オプションでエラーが起こったときにシェルが終了するようにする   
@@ -100,6 +100,9 @@ exit で退出
 ### `docker-compose build` , `docker-compose up -d`
 Dockerfile Gemfileの変更を反映させたい場合に使う
 downさせてからのが良さげ？
+
+### docker system prune -a
+使ってないイメージの削除
 
 
 ## 開発メモ(実行)
@@ -587,5 +590,7 @@ rails db:rollbackからの変更、migrate
 ### 12/18
 #### 資料集め
 - [unicornについて](https://www.autovice.jp/articles/146)
+    - `File.expand_path`などで絶対パスを作り、それぞれの役割のファイルを置く場所を指定    
+    `/../`→親階層   `__FILE__`→実行ファイル
 - []
 #### next

@@ -19,3 +19,4 @@ EXPOSE 3000
 
 # Start the main process.
 CMD ["rails", "server", "-b", "0.0.0.0"]
+# CMD ["bundle", "exec", "unicorn", "-p", "3000", "-c", "config/unicorn.rb", "-E", "development" "-D"]

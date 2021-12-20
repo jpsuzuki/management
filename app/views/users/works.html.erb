@@ -7,7 +7,7 @@
                                 class:"btn btn-outline-secondary d-block"%> 
     </div>
     <div class="h2">
-      <%= @date.month %>月分
+      <%= @date %>月分
     </div>
     <div>
       <%= link_to "翌月分＞" ,
@@ -48,7 +48,7 @@
   
   <div class="row pt-3">
     <div class="col">
-    <%= link_to "勤怠情報を追加", new_work_path,
+      <%= link_to "勤怠情報を追加", new_work_path,
                 class:"btn btn-primary d-block" %>
     </div>
   </div>
