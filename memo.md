@@ -275,8 +275,8 @@ form_with(url: login_path, scope: :session, local: true)
 - before_action current_user
 - user_controller_test
 - admin属性追加
-####　メモ
-- rails t　失敗     
+#### メモ
+- rails t 失敗     
 log_in_asメソッドのuser.numberが効かない
 ⇨setupで@other_userを定義していなかった
 - フレンドリーフォワーディングは実装せずスキップ    
@@ -585,7 +585,17 @@ rails db:rollbackからの変更、migrate
 - user controller test
 
 ### 12/18
-#### 資料集め
+
+## デプロイに向けて
+### 資料集め
 - [unicornについて](https://www.autovice.jp/articles/146)
-- []
-#### next
+- [docker構築](https://qiita.com/E6YOteYPzmFGfOD/items/509dbabeb20bf2487283)
+### do 
+- 年を跨ぐときのworksのバグを修正
+- [docker構築](https://qiita.com/E6YOteYPzmFGfOD/items/509dbabeb20bf2487283)に加えて、エントリーポイントでunicorn.pidを削除
+    - `docker system prune --volumes`で過去のイメージやデータを削除。
+    - 上のコマンドでdbも削除したので、`docker-compose run web bundle exec rails db:create`した後、webコンテナ内で`rails db:migrate RAILS_ENV=development`
+    - これでローカルで起動
+    - `rails db:seed`を実行してseedを実行。初期ユーザはこれで作る
+### next
+- dockerでawsへのデプロイを行う
