@@ -2,7 +2,7 @@ version: '3'
 services:
   web:
     build: .
-    command: dockerize -wait tcp://db:5432 -timeout 20s bundle exec unicorn -p 3000 -c /test_app/config/unicorn.rb 
+    command: bundle exec unicorn -p 3000 -c /test_app/config/unicorn.rb -E production
     tty: true #pry-byebugを使えるようにする
     stdin_open: true
     volumes:
@@ -13,18 +13,18 @@ services:
       - public-data:/test_app/public
     ports:
       - "3000:3000"
-    depends_on:
-      - db
     environment:
       - TZ=Asia/Tokyo
+    # depends_on:
+    #   - db
 
-  db:
-    image: postgres
-    user: postgres
-    volumes:
-      - pg-data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_PASSWORD=password
+  # db:
+  #   image: postgres
+  #   user: postgres
+  #   volumes:
+  #     - pg-data:/var/lib/postgresql/data
+  #   environment:
+  #     - POSTGRES_PASSWORD=password
 
   nginx:
     build:

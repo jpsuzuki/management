@@ -599,3 +599,31 @@ rails db:rollbackからの変更、migrate
     - `rails db:seed`を実行してseedを実行。初期ユーザはこれで作る
 ### next
 - dockerでawsへのデプロイを行う
+    - awsアカウント作成。ショッピング用で
+    - [herokuへのデプロイ](https://www.youtube.com/watch?v=uQf9968RWWo&t=1059)を見て、設定する項目を確認
+    - [既存Ruby on Rails + MySQLアプリをDockerで構築し、AWSにデプロイする](https://qiita.com/sho_U/items/5ef6693f7ae8f1c27bb7)
+
+### つまずき
+#### ec2にログインできない
+- do    
+    - vpc (test_app_vpc)
+    - 上を選択してパブリックサブネット作成(test_app_public_subnet_1a)
+    - IGW(test_app_igw)をvpc (test_app_vpc)にアタッチ
+    - ルートテーブルを作成(test_app_route_table)    
+        サブネット(test_app_public_subnet_1a)を関連付け     
+        IGW(test_app_igw)へのルートを追加
+    - パブリックサブネット用のセキュリティーグループを作成する。    
+        インバウンド    http,ssh全て許可
+    - 2つプライベートサブネット作成(test_app_private_subnet_, 1a, 1c)   
+        10.0.21.0/24 , 10.0.20.0/24
+        インバウンド postgresql
+        ソース  pub用セキュリティグループ
+    - ec2作成   
+        vpc (test_app_vpc)
+        サブネット(test_app_public_subnet_1a)
+- 解決
+    - おそらく外のフリーWi-Fiだと繋がらない
+    - アイプラザで失敗して何も変更せずに家でやって成功
+
+- 087769839005
+
