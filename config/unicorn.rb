@@ -5,7 +5,6 @@ rails_root = File.expand_path('../../', __FILE__)
 ENV['BUNDLE_GEMFILE'] = rails_root + "/Gemfile"
 
 rails_env = ENV['RAILS_ENV'] || 'development'
-
 # Unicornの設定
 worker_processes  2
 timeout           15

@@ -1,21 +1,45 @@
 version: '3'
 services:
-  db:
-    image: postgres
-    user: postgres
-    volumes:
-      - ./tmp/db:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_PASSWORD=password
-
   web:
     build: .
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    command: bundle exec unicorn -p 3000 -c /test_app/config/unicorn.rb -E production
+    tty: true #pry-byebugを使えるようにする
+    stdin_open: true
     volumes:
-      - .:/test_app
+      - .:/test_app:cached
+      #ソケット通信用ファイルをnginxコンテナと共有
+      - tmp-data:/test_app/tmp/sockets
+      #画像データとかをnginxと共有
+      - public-data:/test_app/public
     ports:
       - "3000:3000"
-    depends_on:
-      - db
     environment:
       - TZ=Asia/Tokyo
+    # depends_on:
+    #   - db
+
+  # db:
+  #   image: postgres
+  #   user: postgres
+  #   volumes:
+  #     - pg-data:/var/lib/postgresql/data
+  #   environment:
+  #     - POSTGRES_PASSWORD=password
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    restart: always
+    volumes:
+      - tmp-data:/test_app/tmp/sockets
+      - public-data:/test_app/public
+    depends_on:
+      - web 
+
+volumes:
+  public-data:
+  tmp-data:
+  pg-data:

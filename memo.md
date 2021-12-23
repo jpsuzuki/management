@@ -278,8 +278,8 @@ form_with(url: login_path, scope: :session, local: true)
 - before_action current_user
 - user_controller_test
 - admin属性追加
-####　メモ
-- rails t　失敗     
+#### メモ
+- rails t 失敗     
 log_in_asメソッドのuser.numberが効かない
 ⇨setupで@other_userを定義していなかった
 - フレンドリーフォワーディングは実装せずスキップ    
@@ -588,9 +588,48 @@ rails db:rollbackからの変更、migrate
 - user controller test
 
 ### 12/18
-#### 資料集め
+
+## デプロイに向けて
+### 資料集め
 - [unicornについて](https://www.autovice.jp/articles/146)
     - `File.expand_path`などで絶対パスを作り、それぞれの役割のファイルを置く場所を指定    
     `/../`→親階層   `__FILE__`→実行ファイル
 - []
 #### next
+- [docker構築](https://qiita.com/E6YOteYPzmFGfOD/items/509dbabeb20bf2487283)
+### do 
+- 年を跨ぐときのworksのバグを修正
+- [docker構築](https://qiita.com/E6YOteYPzmFGfOD/items/509dbabeb20bf2487283)に加えて、エントリーポイントでunicorn.pidを削除
+    - `docker system prune --volumes`で過去のイメージやデータを削除。
+    - 上のコマンドでdbも削除したので、`docker-compose run web bundle exec rails db:create`した後、webコンテナ内で`rails db:migrate RAILS_ENV=development`
+    - これでローカルで起動
+    - `rails db:seed`を実行してseedを実行。初期ユーザはこれで作る
+### next
+- dockerでawsへのデプロイを行う
+    - awsアカウント作成。ショッピング用で
+    - [herokuへのデプロイ](https://www.youtube.com/watch?v=uQf9968RWWo&t=1059)を見て、設定する項目を確認
+    - [既存Ruby on Rails + MySQLアプリをDockerで構築し、AWSにデプロイする](https://qiita.com/sho_U/items/5ef6693f7ae8f1c27bb7)
+
+### つまずき
+#### ec2にログインできない
+- do    
+    - vpc (test_app_vpc)
+    - 上を選択してパブリックサブネット作成(test_app_public_subnet_1a)
+    - IGW(test_app_igw)をvpc (test_app_vpc)にアタッチ
+    - ルートテーブルを作成(test_app_route_table)    
+        サブネット(test_app_public_subnet_1a)を関連付け     
+        IGW(test_app_igw)へのルートを追加
+    - パブリックサブネット用のセキュリティーグループを作成する。    
+        インバウンド    http,ssh全て許可
+    - 2つプライベートサブネット作成(test_app_private_subnet_, 1a, 1c)   
+        10.0.21.0/24 , 10.0.20.0/24
+        インバウンド postgresql
+        ソース  pub用セキュリティグループ
+    - ec2作成   
+        vpc (test_app_vpc)
+        サブネット(test_app_public_subnet_1a)
+- 解決
+    - おそらく外のフリーWi-Fiだと繋がらない
+    - アイプラザで失敗して何も変更せずに家でやって成功
+
+- 087769839005
