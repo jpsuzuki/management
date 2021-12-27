@@ -3,6 +3,7 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title><%= yield(:title) %></title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -21,15 +22,15 @@
       <div class="container d-flex justify-content-between">
           <% if logged_in? %>
             <% if current_user.admin? %>
-              <%= link_to "山水", users_path, class: "h1 text-light"  %>
+              <%= link_to "勤怠管理", users_path, class: "h1 text-light"  %>
             <% else %>
-              <%= link_to "山水", root_path, class: "h1 text-light"  %>
+              <%= link_to "勤怠管理", root_path, class: "h1 text-light"  %>
             <%end%>
             <%= link_to "ログアウト", logout_path, 
             method: :delete, class: "btn btn-outline-danger" %>
           <% else %>
             <div class="h1 text-light">
-              山水
+              勤怠管理
             </div>
           <% end %>
         </div>
