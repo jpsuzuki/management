@@ -17,4 +17,8 @@ class ApplicationController < ActionController::Base
             end
         end
 
+        def work_params
+            params.require(:work).permit(:day,:start,:finish)
+        end
+
 end

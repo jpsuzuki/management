@@ -11,6 +11,23 @@ class RightsController < ApplicationController
     end
   end
 
+  def work_new
+    @user = User.find(params[:id])
+    @work = @user.works.build
+  end
+
+  def work_create
+    @user = User.find(params[:work][:id])
+    @work = @user.works.build(work_params)
+    date = @work.day
+    if @work.save
+      flash[:success] = "勤怠情報を作りました"
+      redirect_to controller: "users", id: @user.id, action: "works",date: date
+    else
+      render 'work_new'
+    end
+  end
+
   private
 
   def admin_params

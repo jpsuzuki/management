@@ -38,3 +38,5 @@ yarn-debug.log*
 # 追加記述
 /memo.md
 .env
+/docker-compose.yml
+/nginx/nginx.conf
