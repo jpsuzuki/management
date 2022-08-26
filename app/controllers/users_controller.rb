@@ -41,8 +41,13 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    User.find(params[:id]).destroy
-    flash[:success] = "削除しました"
+    user = User.find(params[:id])
+    unless user.admin?
+      user.destroy 
+      flash[:success] = "削除しました"
+    else
+      flash[:danger] = "管理者は削除できません"
+    end
     redirect_to users_url
   end
 
